@@ -14,12 +14,14 @@ from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 import os
+import dj_database_url
 
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DATABASE_URL='mysql://root:SKxInLkTBhtwDvCcmGdtPygGcnyiZEjl@monorail.proxy.rlwy.net:50177/railway'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -97,14 +99,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'railway',
-        'USER': 'root',
-        'PASSWORD': 'SKxInLkTBhtwDvCcmGdtPygGcnyiZEjl',
-        'HOST': 'monorail.proxy.rlwy.net',  # Or an IP Address that your DB is hosted on
-        'PORT': '50177',
-    }
+    'default': dj_database_url.config(default=DATABASE_URL,conn_max_age=1800),
 }
 
 
