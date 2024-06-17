@@ -101,9 +101,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'railway',
         'USER': 'root',
-        'PASSWORD': 'IGpZADWyfLiXRAWMEuncKzMgoNJvCIwa',
+        'PASSWORD': 'SKxInLkTBhtwDvCcmGdtPygGcnyiZEjl',
         'HOST': 'monorail.proxy.rlwy.net',  # Or an IP Address that your DB is hosted on
-        'PORT': '18424',
+        'PORT': '50177',
     }
 }
 
