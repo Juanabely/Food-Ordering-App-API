@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from api.views import CreateUserView,CustomTokenObtainPairView
+from api.views import CreateUserView,CustomTokenObtainPairView,index,stk_push_callback
 from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 
 urlpatterns = [
@@ -25,4 +25,6 @@ urlpatterns = [
     path("api/token/",CustomTokenObtainPairView.as_view(),name="get_token"),
     path("api/token/refresh/",TokenRefreshView.as_view(),name="refresh"),
     path("api-auth/", include("rest_framework.urls")), 
+    path('api/daraja/',index,name='index' ),
+    path('api/daraja/stk-push/',stk_push_callback,name='mpesa_stk_callback'),
 ]

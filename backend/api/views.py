@@ -6,9 +6,12 @@ from .models import CustomUser
 from rest_framework import generics
 from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated ,AllowAny
-from django.http import JsonResponse
+from django_daraja.mpesa.core import MpesaClient
+from django.http import HttpResponse
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-import requests
+
+
 # Create your views here.
 class CreateUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
@@ -31,4 +34,19 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
-  
+@api_view(['POST'])
+def index(request):
+    cl = MpesaClient()
+    # Use a Safaricom phone number that you have access to, for you to be able to view the prompt.
+    phone_number = request.data.get('phone')
+    amount = request.data.get('amount')
+    account_reference = 'reference'
+    transaction_desc = 'Description'
+    callback_url = 'https://darajambili.herokuapp.com/express-payment';
+    response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+    return HttpResponse(response)
+@api_view(['POST'])
+def stk_push_callback(request):
+        data = json.loads(request.body)
+        
+        return HttpResponse("STK Push in Django👋",data)
