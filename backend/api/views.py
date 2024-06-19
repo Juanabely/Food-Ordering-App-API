@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django.shortcuts import render
 # views.py
@@ -49,6 +50,13 @@ def index(request):
     return HttpResponse(response)
 @api_view(['POST'])
 def stk_push_callback(request):
+    # Log the raw request body
+    logging.info(f"Raw request body: {request.body}")
+
+    try:
         data = json.loads(request.body)
-        
-        return HttpResponse("STK Push in Django👋",data)
+        # Continue processing...
+    except json.JSONDecodeError as e:
+        # Log the error for debugging
+        logging.error(f"JSON decode error: {e}")
+        return Response("Invalid JSON data", status=400)
