@@ -5,9 +5,9 @@ from django.shortcuts import render
 # views.py
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import CustomUser
+from .models import CustomUser,Food,Order
 from rest_framework import generics
-from .serializers import UserSerializer
+from .serializers import UserSerializer,FoodSerializer,OrderSerializer
 from rest_framework.permissions import IsAuthenticated ,AllowAny
 from django_daraja.mpesa.core import MpesaClient
 from django.http import HttpResponse
@@ -60,3 +60,18 @@ def stk_push_callback(request):
         # Log the error for debugging
         logging.error(f"JSON decode error: {e}")
         return Response("Invalid JSON data", status=400)
+    
+class FoodListView (generics.ListAPIView):
+    queryset = Food.objects.all()
+    serializer_class = FoodSerializer
+    permission_classes=[IsAuthenticated]
+
+class FoodCreateView (generics.CreateAPIView):
+     queryset = Food.objects.all()
+     serializer_class = FoodSerializer
+     permission_classes = [IsAuthenticated]
+
+class OrderListView (generics.CreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class =OrderSerializer
+    permission_classes=[IsAuthenticated]
