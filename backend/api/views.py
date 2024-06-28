@@ -33,7 +33,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = CustomUser.email
         token['location'] = CustomUser.location
         token['phone'] = CustomUser.phone
-        token['id'] =CustomUser.id
+        token['id'] =CustomUser.ID
         return token
 
 class CustomTokenObtainPairView(TokenObtainPairView):
