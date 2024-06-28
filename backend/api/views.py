@@ -72,10 +72,15 @@ class FoodCreateView (generics.CreateAPIView):
      permission_classes = [AllowAny]
 
 # views.py
-class OrderListView(generics.CreateAPIView):
+class OrdersListView (generics.ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
+
+class OrderListView(generics.CreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         orders_data = request.data  # Assuming the request data is an array of orders
