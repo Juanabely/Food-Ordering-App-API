@@ -1,4 +1,4 @@
-from .models import CustomUser,Food,Order
+from .models import CustomUser,Food,Orders
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,6 +18,6 @@ class FoodSerializer (serializers.ModelSerializer):
 
 class OrderSerializer (serializers.ModelSerializer):
     class Meta :
-        model = Order
+        model = Orders
         fields = '__all__'
         extra_kwargs = {"user":{"write_only":True}}

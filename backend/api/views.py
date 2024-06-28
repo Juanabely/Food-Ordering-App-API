@@ -5,7 +5,7 @@ from django.shortcuts import render
 # views.py
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import CustomUser,Food,Order
+from .models import CustomUser,Food,Orders
 from rest_framework import generics
 from .serializers import UserSerializer,FoodSerializer,OrderSerializer
 from rest_framework.permissions import IsAuthenticated ,AllowAny
@@ -73,30 +73,12 @@ class FoodCreateView (generics.CreateAPIView):
 
 # views.py
 class OrdersListView (generics.ListAPIView):
-    queryset = Order.objects.all()
+    queryset = Orders.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
 class OrderListView(generics.CreateAPIView):
-    queryset = Order.objects.all()
+    queryset = Orders.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
-    def create(self, request, *args, **kwargs):
-        orders_data = request.data  # Assuming the request data is an array of orders
-        orders_with_quantity = []
-
-        for order_data in orders_data:
-            food_id = order_data.get('food_id')  # Adjust this based on your actual request data
-            quantity = order_data.get('quantity')
-
-            try:
-                food = Food.objects.get(pk=food_id)
-                order = Order(user=request.user, food=food, price=food.price, quantity=quantity)
-                orders_with_quantity.append(order)
-            except Food.DoesNotExist:
-                # Handle the case where the food item doesn't exist
-                pass
-
-        Order.objects.bulk_create(orders_with_quantity)
-        return Response("Orders created successfully")
