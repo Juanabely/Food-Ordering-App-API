@@ -21,8 +21,7 @@ class Food(models.Model):
     
 class Order(models.Model):
     user =models.ForeignKey(CustomUser,on_delete=models.CASCADE)
-    food = models.ForeignKey(Food,on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    price = models.PositiveIntegerField()
 
     def __str__(self) :
         return f"order for {self.user.username}:{self.food.food_name}:{self.user.location}"    
