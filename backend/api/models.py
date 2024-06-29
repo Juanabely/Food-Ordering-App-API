@@ -18,12 +18,6 @@ class Food(models.Model):
         return self.food_name
 
 class Orders(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    food = models.ForeignKey(Food, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    price = models.PositiveIntegerField()
-
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE ,null=True)
+    food_items = models.JSONField(default=list)
     
-
-    def __str__(self):
-        return f"order for {self.user.username}: {self.food.food_name}"

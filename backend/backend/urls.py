@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from api.views import CreateUserView,CustomTokenObtainPairView,index,stk_push_callback,FoodCreateView,FoodListView,OrderListView,OrdersListView
+from api.views import CreateUserView,CustomTokenObtainPairView,index,stk_push_callback,FoodCreateView,FoodListView,CreateOrder,OrdersListView
 from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 
 urlpatterns = [
@@ -29,7 +29,7 @@ urlpatterns = [
     path('api/daraja/stk-push/',stk_push_callback,name='mpesa_stk_callback'),
     path('api/user/foodlist/',FoodListView.as_view(),name='foodlist'),
     path('api/admin/foodcreate/',FoodCreateView.as_view(),name='foodcreate'),
-    path('api/orders/',OrderListView.as_view(),name='orders'),
+    path('api/orders/',CreateOrder.as_view(),name='orders'),
     path('api/listorders/',OrdersListView.as_view(),name='orderslist')
 
 ]

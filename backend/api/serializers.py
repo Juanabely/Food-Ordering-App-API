@@ -11,37 +11,20 @@ class UserSerializer(serializers.ModelSerializer):
          user = CustomUser.objects.create_user(**validated_data) 
          return user  
 
-from rest_framework import serializers
-from.models import Food, Orders
-
-class FoodItemSerializer(serializers.Serializer):
-    food_id = serializers.PrimaryKeyRelatedField(queryset=Food.objects.all())
-    quantity = serializers.IntegerField()
-    price = serializers.IntegerField()
-
-    def validate(self, data):
-        # Ensure the calculated price matches the expected price
-        food_item = data['food_id']
-        expected_price = food_item.price * data['quantity']
-        if data['price']!= expected_price:
-            raise serializers.ValidationError({"price": "Calculated price does not match expected price."})
-        return data
-
 class FoodSerializer (serializers.ModelSerializer):
     class Meta:
         model = Food
         fields  = '__all__'
 
+class FoodItemSerializer(serializers.Serializer):
+    food_name = serializers.CharField(max_length=50)
+    food_price = serializers.DecimalField(max_digits=10, decimal_places=2)
+
 class OrderSerializer(serializers.ModelSerializer):
-    food_items = FoodItemSerializer(many=True)
+    user_username = serializers.CharField(source='user.username', read_only=True)
+    user_location = serializers.CharField(source='user.location', read_only=True)  # Assuming 'location' is a field in your User model
+    user_phone = serializers.CharField(source='user.phone', read_only=True)  # Assuming 'phone' is a field in your User model
 
     class Meta:
         model = Orders
-        fields = ['user', 'food_items']
-
-    def create(self, validated_data):
-        food_items_data = validated_data.pop('food_items')
-        order = Orders.objects.create(**validated_data)
-        for food_item_data in food_items_data:
-            FoodItemSerializer().create(food_item_data)
-        return order
+        fields = ['user', 'food_items', 'user_username', 'user_location', 'user_phone']

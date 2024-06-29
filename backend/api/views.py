@@ -3,6 +3,7 @@ import logging
 
 from django.shortcuts import render
 # views.py
+from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import CustomUser,Food,Orders
@@ -13,6 +14,7 @@ from django_daraja.mpesa.core import MpesaClient
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 
 
 # Create your views here.
@@ -78,8 +80,19 @@ class OrdersListView (generics.ListAPIView):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
-class OrderListView(generics.CreateAPIView):
+class CreateOrder(generics.CreateAPIView):
     queryset = Orders.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [AllowAny]
 
+    def create(self, request, *args, **kwargs):
+        is_many = isinstance(request.data, list)
+        
+        if not is_many:
+            return super().create(request, *args, **kwargs)
+        else:
+            serializer = self.get_serializer(data=request.data, many=True)
+            serializer.is_valid(raise_exception=True)
+            
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
